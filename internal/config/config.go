@@ -31,4 +31,23 @@ func Read() (Config, error) {
 	return c, nil
 }
 
-func (c *Config) SetUser()
+func (c *Config) SetUser(name string) error {
+	c.CurrentUserName = name
+
+	jsonData, err := json.Marshal(c)
+	if err != nil {
+		return err
+	}
+	homeDir, err := os.UserHomeDir() //returns home directory to create path to gatorconfig.json
+	if err != nil {
+		return err
+	}
+	path := filepath.Join(homeDir, ".gatorconfig.json")
+
+	err = os.WriteFile(path, jsonData, 0644)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
