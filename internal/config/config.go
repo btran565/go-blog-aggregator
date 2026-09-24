@@ -30,3 +30,5 @@ func Read() (Config, error) {
 	}
 	return c, nil
 }
+
+func (c *Config) SetUser()
