@@ -1,2 +1,6 @@
+POSTGRESQL:
 sudo service postgresql start
 sudo service postgresql status
+
+CONFIG FILES:
+code ~/.gatorconfig.json
