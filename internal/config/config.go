@@ -16,7 +16,7 @@ func Read() (Config, error) {
 	if err != nil {
 		return Config{}, err
 	}
-	path := filepath.Join(homeDir, ".gatorconfig.json")
+	path := filepath.Join(homeDir, ".gatorconfig.json") //gatorconfig path
 
 	data, err := os.ReadFile(path)
 	if err != nil {
