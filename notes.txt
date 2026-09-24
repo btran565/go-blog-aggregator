@@ -4,3 +4,4 @@ sudo service postgresql status
 
 CONFIG FILES:
 code ~/.gatorconfig.json
+Users must do this everytime - include in README.md
