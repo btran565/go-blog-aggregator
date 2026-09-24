@@ -1,6 +1,7 @@
 package config
 
 import (
+	"encoding/json"
 	"os"
 	"path/filepath"
 )
@@ -16,4 +17,16 @@ func Read() (Config, error) {
 		return Config{}, err
 	}
 	path := filepath.Join(homeDir, ".gatorconfig.json")
+
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return Config{}, err
+	}
+
+	var c Config
+	err = json.Unmarshal(data, &c)
+	if err != nil {
+		return Config{}, err
+	}
+	return c, nil
 }
