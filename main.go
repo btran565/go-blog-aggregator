@@ -20,11 +20,15 @@ type commands struct {
 }
 
 func (c *commands) run(s *state, cmd command) error {
-
+	value, ok := c.cmdMap[cmd.name]
+	if ok == false {
+		return fmt.Errorf("command doesn't exist")
+	}
+	return value(s, cmd)
 }
 
-func (c *commands) register(name string, f func(*state, command)) error {
-
+func (c *commands) register(name string, f func(*state, command) error) {
+	c.cmdMap[name] = f
 }
 
 func handlerLogin(s *state, cmd command) error {
