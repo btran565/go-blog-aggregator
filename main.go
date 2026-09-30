@@ -62,4 +62,15 @@ func main() {
 		os.Exit(1)
 	}
 
+	cmd := command{
+		name: os.Args[1],
+		args: os.Args[2:],
+	}
+
+	err = cmds.run(s, cmd)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
 }
