@@ -25,7 +25,7 @@ func Read() (Config, error) {
 	}
 
 	var cfg Config
-	err = json.Unmarshal(data, &c)
+	err = json.Unmarshal(data, &cfg)
 	if err != nil {
 		return Config{}, err
 	}
