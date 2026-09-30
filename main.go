@@ -51,5 +51,7 @@ func main() {
 	s := &state{
 		cfg: &cfg, //assign s.cfg to the address of cfg assigned above
 	}
-
+	cmds := &commands{
+		cmdMap: make(map[string]func(*state, command) error),
+	}
 }
