@@ -54,4 +54,5 @@ func main() {
 	cmds := &commands{
 		cmdMap: make(map[string]func(*state, command) error),
 	}
+	cmds.register("login", handlerLogin)
 }
