@@ -48,7 +48,8 @@ func main() {
 	if err != nil {
 		return
 	}
-	cfg.SetUser("brandon")
-	cfg, err = config.Read()
-	fmt.Print(cfg)
+	s := &state{
+		cfg: &cfg, //assign s.cfg to the address of cfg assigned above
+	}
+
 }
