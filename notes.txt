@@ -6,7 +6,8 @@ sudo passwd postgres
 //PASSWORD: postgres
 CREATE DATABASE gator;
 \c gator
-
+ALTER USER postgres PASSWORD 'postgres';
+//theres a difference between altering the system user's password and the database user's password
 
 //CONFIG FILES:
 code ~/.gatorconfig.json
