@@ -1,11 +1,13 @@
-POSTGRESQL:
+//POSTGRESQL:
 sudo service postgresql start
 sudo service postgresql status
 psql --version
 sudo passwd postgres
-PASSWORD: postgres
+//PASSWORD: postgres
+CREATE DATABASE gator;
+\c gator
 
 
-CONFIG FILES:
+//CONFIG FILES:
 code ~/.gatorconfig.json
 Users must do this everytime - include in README.md
