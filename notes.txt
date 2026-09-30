@@ -19,3 +19,7 @@ Users must do this everytime - include in README.md
 
 GOOSE:
 go install github.com/pressly/goose/v3/cmd/goose@latest
+
+OTHER:
+mkdir -p sql/schema
+code sql/schema/001_users.sql
