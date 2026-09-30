@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/btran565/go-blog-aggregator/internal/config"
 )
@@ -55,4 +56,10 @@ func main() {
 		cmdMap: make(map[string]func(*state, command) error),
 	}
 	cmds.register("login", handlerLogin)
+
+	if len(os.Args) < 2 { //os.Args is a []string
+		fmt.Errorf("Error: less than 2 arguments")
+		os.Exit(1)
+	}
+
 }
