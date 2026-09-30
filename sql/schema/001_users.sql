@@ -5,3 +5,6 @@ CREATE TABLE users (
     updated_at TIMESTAMP NOT NULL,
     name TEXT NOT NULL
 );
+
+-- +goose Down
+DROP TABLE users;
