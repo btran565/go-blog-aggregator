@@ -58,7 +58,7 @@ func main() {
 	cmds.register("login", handlerLogin)
 
 	if len(os.Args) < 2 { //os.Args is a []string
-		fmt.Errorf("Error: less than 2 arguments")
+		fmt.Printf("Error: less than 2 arguments")
 		os.Exit(1)
 	}
 
