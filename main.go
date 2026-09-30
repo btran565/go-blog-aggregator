@@ -10,6 +10,17 @@ type state struct {
 	cfg *config.Config
 }
 
+type command struct {
+	name string
+	args []string
+}
+
+func handlerLogin(s *state, cmd command) error {
+	if len(cmd.args) == 0 {
+		return fmt.Errorf("login requires a username argument")
+	}
+}
+
 func main() {
 	cfg, err := config.Read()
 	if err != nil {
