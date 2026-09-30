@@ -19,6 +19,8 @@ func handlerLogin(s *state, cmd command) error {
 	if len(cmd.args) == 0 {
 		return fmt.Errorf("login requires a username argument")
 	}
+	return s.cfg.SetUser(cmd.args[0]) //already returns error, so i can return it directly w/out check
+
 }
 
 func main() {
