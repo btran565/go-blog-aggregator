@@ -24,18 +24,18 @@ func Read() (Config, error) {
 		return Config{}, err
 	}
 
-	var c Config
+	var cfg Config
 	err = json.Unmarshal(data, &c)
 	if err != nil {
 		return Config{}, err
 	}
-	return c, nil
+	return cfg, nil
 }
 
-func (c *Config) SetUser(name string) error {
-	c.CurrentUserName = name
+func (cfg *Config) SetUser(name string) error {
+	cfg.CurrentUserName = name
 
-	return write(*c)
+	return write(*cfg)
 
 }
 
@@ -47,8 +47,8 @@ func getConfigFilePath() (string, error) {
 	return filepath.Join(homeDir, configFileName), nil
 }
 
-func write(c Config) error {
-	jsonData, err := json.Marshal(c)
+func write(cfg Config) error {
+	jsonData, err := json.Marshal(cfg)
 	if err != nil {
 		return err
 	}
