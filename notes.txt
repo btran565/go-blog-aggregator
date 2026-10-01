@@ -8,6 +8,7 @@ psql --version
 sudo passwd postgres
 
 ### CONNECTION STRING ###
+## FORMAT: protocol://username:password@host:port/database
 postgres://postgres:postgres@localhost:5432/gator
 psql "postgres://postgres:postgres@localhost:5432/gator"
 
