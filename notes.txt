@@ -1,25 +1,30 @@
-//PROGRESS: 
+### PROGRESS: ### 
 2-2
 
-//POSTGRESQL:
+### POSTGRESQL: ###
 sudo service postgresql start
 sudo service postgresql status
 psql --version
 sudo passwd postgres
-//PASSWORD: postgres
+
+### CONNECTION STRING ###
+psql "postgres://postgres:postgres@localhost:5432/gator"
+
+## PASSWORD: postgres
 CREATE DATABASE gator;
 \c gator
 ALTER USER postgres PASSWORD 'postgres';
-//theres a difference between altering the system user's password and the database user's password
+
+### theres a difference between altering the system user's password and the database user's password ###
 SELECT version();
 
-//CONFIG FILES:
+### CONFIG FILES: ###
 code ~/.gatorconfig.json
 Users must do this everytime - include in README.md
 
-GOOSE:
+### GOOSE: ###
 go install github.com/pressly/goose/v3/cmd/goose@latest
 
-OTHER:
+### OTHER: ###
 mkdir -p sql/schema
 code sql/schema/001_users.sql
