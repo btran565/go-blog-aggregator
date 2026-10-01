@@ -8,7 +8,9 @@ psql --version
 sudo passwd postgres
 
 ### CONNECTION STRING ###
+postgres://postgres:postgres@localhost:5432/gator
 psql "postgres://postgres:postgres@localhost:5432/gator"
+
 
 ## PASSWORD: postgres
 CREATE DATABASE gator;
