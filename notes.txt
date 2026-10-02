@@ -12,6 +12,8 @@ sudo passwd postgres
 ## FORMAT: protocol://username:password@host:port/database
 postgres://postgres:postgres@localhost:5432/gator
 
+# IN .CONFIG FORMAT: protocol://username:password@host:port/database?sslmode=disable
+
 ## ON MAC THIS WOULD BE 'psql gator':
 psql "postgres://postgres:postgres@localhost:5432/gator" 
 
