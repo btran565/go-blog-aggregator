@@ -17,7 +17,8 @@ postgres://postgres:postgres@localhost:5432/gator
 ## ON MAC THIS WOULD BE 'psql gator':
 psql "postgres://postgres:postgres@localhost:5432/gator" 
 
-
+## ENTER psql SHELL FOR THE FIRST TIME
+sudo -u postgres psql
 ## PASSWORD: postgres
 CREATE DATABASE gator;
 \c gator
