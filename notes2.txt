@@ -1,0 +1,57 @@
+# Project Notes
+
+## Progress
+- Currently on lesson 2-3 of blog aggregator
+
+## PostgreSQL
+
+### Setup Commands
+sudo service postgresql start
+sudo service postgresql status
+psql --version
+sudo passwd postgres  # set system user password to 'postgres'
+
+### First Time Setup
+sudo -u postgres psql           # enter psql shell as postgres user
+CREATE DATABASE gator;          # create the database
+\c gator                        # connect to it
+ALTER USER postgres PASSWORD 'postgres';  # set database user password
+SELECT version();               # verify installation
+
+### Note
+There is a difference between the system user password (sudo passwd postgres)
+and the database user password (ALTER USER postgres PASSWORD).
+
+### Connection String
+Format:   protocol://username:password@host:port/database
+Goose:    postgres://postgres:postgres@localhost:5432/gator
+App/Config: postgres://postgres:postgres@localhost:5432/gator?sslmode=disable
+
+### Connecting via psql
+psql "postgres://postgres:postgres@localhost:5432/gator"
+# Note: 'psql gator' only works on Mac, not Linux/WSL
+
+## Config File
+
+### Location
+~/.gatorconfig.json
+
+### Setup
+Run: code ~/.gatorconfig.json
+Add to README.md — users must create this file manually when cloning the project
+
+## Goose Migrations
+
+### Install
+go install github.com/pressly/goose/v3/cmd/goose@latest
+
+### Usage
+cd sql/schema
+goose postgres "postgres://postgres:postgres@localhost:5432/gator" up
+goose postgres "postgres://postgres:postgres@localhost:5432/gator" down
+
+## Other
+
+### Useful Commands
+mkdir -p sql/schema
+code sql/schema/001_users.sql
