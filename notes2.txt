@@ -51,8 +51,23 @@ cd sql/schema
 goose postgres "postgres://postgres:postgres@localhost:5432/gator" up
 goose postgres "postgres://postgres:postgres@localhost:5432/gator" down
 
+## PostgreSQL Driver (lib/pq)
+
+### Install
+go get github.com/lib/pq
+
+### Import in main.go
+import _ "github.com/lib/pq"
+
+### Why the underscore?
+The _ tells Go to import the package for its side effects only.
+pq registers itself as a PostgreSQL driver with database/sql at import time.
+You never call anything from pq directly, but sql.Open("postgres", ...) needs it registered to work.
+Go would throw a compile error if you imported a package without using it — the _ suppresses that error.
+
 ## Other
 
 ### Useful Commands
 mkdir -p sql/schema
 code sql/schema/001_users.sql
+

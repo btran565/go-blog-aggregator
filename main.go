@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/btran565/go-blog-aggregator/internal/config"
+	_ "github.com/lib/pq"
 )
 
 type state struct {
