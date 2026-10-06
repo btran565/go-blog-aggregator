@@ -1,14 +1,17 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
 	"os"
 
 	"github.com/btran565/go-blog-aggregator/internal/config"
+	"github.com/btran565/go-blog-aggregator/internal/database"
 	_ "github.com/lib/pq"
 )
 
 type state struct {
+	db  *database.Queries
 	cfg *config.Config
 }
 
@@ -73,5 +76,12 @@ func main() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
+
+	db, err := sql.Open("postgres", cfg.DbURL)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+	dbQueries := database.New(db)
 
 }
