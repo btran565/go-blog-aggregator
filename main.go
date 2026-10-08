@@ -61,7 +61,17 @@ func handlerRegister(s *state, cmd command) error {
 		UpdatedAt: time.Now(),
 		Name:      cmd.args[0],
 	})
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
 
+	err = s.cfg.SetUser(user.Name)
+	if err != nil {
+		os.Exit(1)
+	}
+	fmt.Printf("user was created: %v\n", user)
+	return nil
 }
 
 func main() {
@@ -76,6 +86,7 @@ func main() {
 		cmdMap: make(map[string]func(*state, command) error),
 	}
 	cmds.register("login", handlerLogin)
+	cmds.register("register", handlerRegister) //testing
 
 	if len(os.Args) < 2 { //os.Args is a []string
 		fmt.Printf("Error: less than 2 arguments")
