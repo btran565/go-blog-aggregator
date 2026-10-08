@@ -5,9 +5,11 @@ import (
 	"database/sql"
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/btran565/go-blog-aggregator/internal/config"
 	"github.com/btran565/go-blog-aggregator/internal/database" //all database directory files are in 'package database'
+	"github.com/google/uuid"
 	_ "github.com/lib/pq"
 )
 
@@ -54,8 +56,12 @@ func handlerRegister(s *state, cmd command) error {
 		return fmt.Errorf("register requires a name argument")
 	}
 	user, err := s.db.CreateUser(context.Background(), database.CreateUserParams{
-		ID: 
+		ID:        uuid.New(),
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
+		Name:      cmd.args[0],
 	})
+
 }
 
 func main() {
