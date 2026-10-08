@@ -45,7 +45,8 @@ func handlerLogin(s *state, cmd command) error {
 	}
 	err := s.cfg.SetUser(cmd.args[0])
 	if err != nil {
-		return err
+		fmt.Println(err)
+		os.Exit(1)
 	}
 	fmt.Println("user has been set")
 	return nil
@@ -86,7 +87,6 @@ func main() {
 		cmdMap: make(map[string]func(*state, command) error),
 	}
 	cmds.register("login", handlerLogin)
-	cmds.register("register", handlerRegister) //testing
 
 	if len(os.Args) < 2 { //os.Args is a []string
 		fmt.Printf("Error: less than 2 arguments")
