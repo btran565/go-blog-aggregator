@@ -1,12 +1,13 @@
 package main
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
 	"os"
 
 	"github.com/btran565/go-blog-aggregator/internal/config"
-	"github.com/btran565/go-blog-aggregator/internal/database"
+	"github.com/btran565/go-blog-aggregator/internal/database" //all database directory files are in 'package database'
 	_ "github.com/lib/pq"
 )
 
@@ -48,6 +49,15 @@ func handlerLogin(s *state, cmd command) error {
 	return nil
 }
 
+func handlerRegister(s *state, cmd command) error {
+	if len(cmd.args) == 0 {
+		return fmt.Errorf("register requires a name argument")
+	}
+	user, err := s.db.CreateUser(context.Background(), database.CreateUserParams{
+		ID: 
+	})
+}
+
 func main() {
 	cfg, err := config.Read()
 	if err != nil {
@@ -82,6 +92,6 @@ func main() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-	dbQueries := database.New(db)
+	dbQueries := database.New(db) //New() function from database/db.go
 
 }
