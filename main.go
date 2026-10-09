@@ -43,7 +43,12 @@ func handlerLogin(s *state, cmd command) error {
 	if len(cmd.args) == 0 {
 		return fmt.Errorf("login requires a username argument")
 	}
-	err := s.cfg.SetUser(cmd.args[0])
+	_, err := s.db.GetUser(context.Background(), cmd.args[0])
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+	err = s.cfg.SetUser(cmd.args[0])
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
@@ -80,13 +85,21 @@ func main() {
 	if err != nil {
 		return
 	}
+	db, err := sql.Open("postgres", cfg.DbURL)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+	dbQueries := database.New(db) //New() function from database/db.go
 	s := &state{
 		cfg: &cfg, //assign s.cfg to the address of cfg assigned above
+		db:  dbQueries,
 	}
 	cmds := &commands{
 		cmdMap: make(map[string]func(*state, command) error),
 	}
 	cmds.register("login", handlerLogin)
+	cmds.register("register", handlerRegister)
 
 	if len(os.Args) < 2 { //os.Args is a []string
 		fmt.Printf("Error: less than 2 arguments")
@@ -103,12 +116,5 @@ func main() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-
-	db, err := sql.Open("postgres", cfg.DbURL)
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
-	dbQueries := database.New(db) //New() function from database/db.go
 
 }
