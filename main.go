@@ -24,7 +24,7 @@ type command struct {
 }
 
 type commands struct {
-	cmdMap map[string]func(*state, command) error
+	cmdMap map[string]func(*state, command) error //key: name of command, value: function mapped to name
 }
 
 func (c *commands) run(s *state, cmd command) error {
