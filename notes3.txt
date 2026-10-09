@@ -1,0 +1,55 @@
+Here's everything you covered:
+
+SQLC
+
+A tool that generates type-safe Go code from SQL queries
+You write SQL, it writes the boilerplate Go scanning code
+Query format: -- name: FunctionName :one tells sqlc the function name and return type
+:one returns a single row, :many returns multiple, :exec returns nothing
+$1, $2... are parameter placeholders — one per value you pass in
+Run sqlc generate from project root to generate code in internal/database/
+
+PostgreSQL Driver
+
+github.com/lib/pq is the PostgreSQL driver for Go
+Imported with _ because it registers itself as a side effect — you never call it directly
+Without it sql.Open("postgres", ...) won't work
+
+Database Connection
+
+sql.Open("postgres", connectionString) opens a connection
+database.New(db) creates a *database.Queries from the generated package
+Both go in main before anything else runs
+Store dbQueries in the state struct so all handlers can access it
+
+State Struct
+
+Holds shared application state — config and database connection
+Passed as a pointer to every handler
+Must be fully initialized before running any commands
+
+Register Handler
+
+Same signature as all handlers: func handlerRegister(s *state, cmd command) error
+Uses uuid.New() for the ID
+Uses time.Now() for timestamps
+Gets the name from cmd.args[0]
+Calls s.db.CreateUser(context.Background(), database.CreateUserParams{...})
+Exits with code 1 on duplicate user
+Sets the current user in config after creating
+
+Login Handler Update
+
+Must check if user exists in database before setting them
+Uses s.db.GetUser(context.Background(), name)
+Exits with code 1 if user not found
+
+Order matters in main
+
+Open database connection first
+Create state with both config and db
+Register commands
+Parse os.Args
+Run the command
+
+Key lesson — the database connection must be set up before running any commands or you get a nil pointer dereference.
