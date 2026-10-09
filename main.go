@@ -111,7 +111,7 @@ func main() {
 		args: os.Args[2:],
 	}
 
-	err = cmds.run(s, cmd)
+	err = cmds.run(s, cmd) //run command the user called
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
