@@ -96,7 +96,14 @@ func handlerUsers(s *state, cmd command) error {
 		fmt.Println("failed to return users")
 		os.Exit(1)
 	}
-
+	for _, val := range users {
+		if val.Name == s.cfg.CurrentUserName {
+			fmt.Printf("* %v (current)\n", val.Name)
+		} else {
+			fmt.Printf("* %v\n", val.Name)
+		}
+	}
+	return nil
 }
 
 func main() {
