@@ -131,7 +131,7 @@ func fetchFeed(ctx context.Context, feedURL string) (*RSSFeed, error) {
 		return nil, err
 	}
 
-	req.Header.Set("User-Agent", "gator")
+	req.Header.Set("User-Agent", "gator") //id's program to server
 
 	client := http.Client{}
 	res, err := client.Do(req)
