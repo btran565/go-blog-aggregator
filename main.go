@@ -150,6 +150,10 @@ func fetchFeed(ctx context.Context, feedURL string) (*RSSFeed, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	//unescape stuff here
+	
+
 	return &data, nil
 }
 
