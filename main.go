@@ -106,6 +106,10 @@ func handlerUsers(s *state, cmd command) error {
 	return nil
 }
 
+func fetchFeed(ctx context.Context, feedURL string) (*RSSFeed, error) {
+
+}
+
 func main() {
 	cfg, err := config.Read()
 	if err != nil {
