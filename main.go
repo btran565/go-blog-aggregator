@@ -131,6 +131,8 @@ func fetchFeed(ctx context.Context, feedURL string) (*RSSFeed, error) {
 		return nil, err
 	}
 
+	req.Header.Set("User-Agent", "gator")
+
 	client := http.Client{}
 	res, err := client.Do(req)
 	if err != nil {
@@ -142,12 +144,13 @@ func fetchFeed(ctx context.Context, feedURL string) (*RSSFeed, error) {
 	if err != nil {
 		return nil, err
 	}
-	var data RSSFeed
 
+	var data RSSFeed
 	err = xml.Unmarshal(body, &data)
 	if err != nil {
 		return nil, err
 	}
+	return &data, nil
 }
 
 func main() {
