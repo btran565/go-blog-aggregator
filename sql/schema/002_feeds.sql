@@ -6,7 +6,7 @@ CREATE TABLE feeds (
     name TEXT NOT NULL,
     url TEXT UNIQUE NOT NULL,
     user_id UUID NOT NULL,
-    Foreign Key (user_id) REFERENCES (users(id)) ON DELETE CASCADE
+    Foreign Key (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 -- +goose Down
