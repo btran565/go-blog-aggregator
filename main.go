@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"encoding/xml"
 	"fmt"
+	"html"
 	"io"
 	"net/http"
 	"os"
@@ -151,8 +152,13 @@ func fetchFeed(ctx context.Context, feedURL string) (*RSSFeed, error) {
 		return nil, err
 	}
 
+	data.Channel.Title = html.UnescapeString(data.Channel.Title)
+	data.Channel.Description = html.UnescapeString(data.Channel.Description)
+	for i, item := range data.Channel.Item {
+		data.Channel.Item[i].Title = html.UnescapeString(item.Title)
+		data.Channel.Item[i].Description = html.UnescapeString(item.Description)
+	}
 	//unescape stuff here
-	
 
 	return &data, nil
 }
