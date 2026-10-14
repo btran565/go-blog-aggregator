@@ -1,55 +1,123 @@
-Here's everything you covered:
+# Gator Project Notes
 
-SQLC
+## Progress
+- Blog aggregator project, lesson 8-9 of 18
 
-A tool that generates type-safe Go code from SQL queries
-You write SQL, it writes the boilerplate Go scanning code
-Query format: -- name: FunctionName :one tells sqlc the function name and return type
-:one returns a single row, :many returns multiple, :exec returns nothing
-$1, $2... are parameter placeholders — one per value you pass in
-Run sqlc generate from project root to generate code in internal/database/
+## Quick Reference — Starting a Session
+1. sudo service postgresql start
+2. cd ~/personal_projects/go-blog-aggregator
+3. code .
+4. Before testing: cd sql/schema && goose postgres "postgres://postgres:postgres@localhost:5432/gator" down && goose postgres "postgres://postgres:postgres@localhost:5432/gator" up
 
-PostgreSQL Driver
+---
 
-github.com/lib/pq is the PostgreSQL driver for Go
-Imported with _ because it registers itself as a side effect — you never call it directly
-Without it sql.Open("postgres", ...) won't work
+## PostgreSQL
 
-Database Connection
+### Daily Commands
+sudo service postgresql start
+sudo service postgresql status
+psql "postgres://postgres:postgres@localhost:5432/gator"  # connect to gator db
+\dt                                                        # list tables
+\q                                                         # exit psql
 
-sql.Open("postgres", connectionString) opens a connection
-database.New(db) creates a *database.Queries from the generated package
-Both go in main before anything else runs
-Store dbQueries in the state struct so all handlers can access it
+### First Time Setup (already done)
+sudo passwd postgres                     # set system user password to 'postgres'
+sudo -u postgres psql                    # enter psql shell
+CREATE DATABASE gator;                   # create the database
+\c gator                                 # connect to it
+ALTER USER postgres PASSWORD 'postgres'; # set database user password
 
-State Struct
+### Note
+Two different passwords:
+- System user: sudo passwd postgres
+- Database user: ALTER USER postgres PASSWORD 'postgres'
+'psql gator' only works on Mac — always use the full connection string on Linux/WSL
 
-Holds shared application state — config and database connection
-Passed as a pointer to every handler
-Must be fully initialized before running any commands
+### Connection Strings
+Goose:      postgres://postgres:postgres@localhost:5432/gator
+App/Config: postgres://postgres:postgres@localhost:5432/gator?sslmode=disable
+Format:     protocol://username:password@host:port/database
 
-Register Handler
+---
 
-Same signature as all handlers: func handlerRegister(s *state, cmd command) error
-Uses uuid.New() for the ID
-Uses time.Now() for timestamps
-Gets the name from cmd.args[0]
-Calls s.db.CreateUser(context.Background(), database.CreateUserParams{...})
-Exits with code 1 on duplicate user
-Sets the current user in config after creating
+## Config File
 
-Login Handler Update
+### Location
+~/.gatorconfig.json
 
-Must check if user exists in database before setting them
-Uses s.db.GetUser(context.Background(), name)
-Exits with code 1 if user not found
+### Format
+{"db_url":"postgres://postgres:postgres@localhost:5432/gator?sslmode=disable","current_user_name":""}
 
-Order matters in main
+### Setup
+code ~/.gatorconfig.json
+Note: Add to README.md — users must create this file manually when cloning
 
-Open database connection first
-Create state with both config and db
-Register commands
-Parse os.Args
-Run the command
+---
 
-Key lesson — the database connection must be set up before running any commands or you get a nil pointer dereference.
+## Goose Migrations
+
+### Install
+go install github.com/pressly/goose/v3/cmd/goose@latest
+
+### Usage (run from sql/schema directory)
+cd sql/schema
+goose postgres "postgres://postgres:postgres@localhost:5432/gator" up
+goose postgres "postgres://postgres:postgres@localhost:5432/gator" down
+
+### Migration File Format
+-- +goose Up
+CREATE TABLE ...
+
+-- +goose Down
+DROP TABLE ...;
+
+---
+
+## SQLC
+
+### Install
+go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest
+
+### Usage (run from project root)
+sqlc generate
+
+### Query File Format
+-- name: FunctionName :one   # returns single row
+-- name: FunctionName :many  # returns multiple rows
+-- name: FunctionName :exec  # returns nothing
+SELECT * FROM users WHERE name = $1;
+
+### Config (sqlc.yaml)
+version: "2"
+sql:
+  - schema: "sql/schema"
+    queries: "sql/queries"
+    engine: "postgresql"
+    gen:
+      go:
+        out: "internal/database"
+
+---
+
+## Dependencies
+
+### PostgreSQL Driver
+go get github.com/lib/pq
+import _ "github.com/lib/pq"  # imported for side effects only
+
+### UUID
+go get github.com/google/uuid
+
+### HTML Unescaping
+go get golang.org/x/net/html
+import "html"  # use html.UnescapeString() on Title and Description fields
+
+---
+
+## Useful Commands
+mkdir -p sql/schema
+code sql/schema/001_users.sql
+go run . register brandon
+go run . login brandon
+go run . reset
+go run . users

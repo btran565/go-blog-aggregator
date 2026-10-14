@@ -71,4 +71,6 @@ Go would throw a compile error if you imported a package without using it — th
 mkdir -p sql/schema
 code sql/schema/001_users.sql
 
+
+### Needed to import html
 go get golang.org/x/net/html
