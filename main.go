@@ -135,6 +135,11 @@ func handlerAgg(s *state, cmd command) error {
 	return nil
 }
 
+func handlerFeeds(s *state, cmd command) error {
+
+	return nil
+}
+
 func handlerAddFeed(s *state, cmd command) error {
 	user, err := s.db.GetUser(context.Background(), s.cfg.CurrentUserName)
 	if err != nil {
