@@ -136,7 +136,11 @@ func handlerAgg(s *state, cmd command) error {
 }
 
 func handlerFeeds(s *state, cmd command) error {
-
+	feeds, err := s.db.GetFeeds(context.Background())
+	if err != nil {
+		return err
+	}
+	fmt.Printf("%v\n", feeds)
 	return nil
 }
 
@@ -224,6 +228,7 @@ func main() {
 	cmds.register("users", handlerUsers)
 	cmds.register("agg", handlerAgg)
 	cmds.register("addfeed", handlerAddFeed)
+	cmds.register("feeds", handlerFeeds)
 
 	if len(os.Args) < 2 { //os.Args is a []string
 		fmt.Printf("Error: less than 2 arguments")
