@@ -197,6 +197,11 @@ func handlerFollow(s *state, cmd command) error {
 	return nil
 }
 
+func handlerFollowing(s *state, cmd command) error {
+
+	return nil
+}
+
 func fetchFeed(ctx context.Context, feedURL string) (*RSSFeed, error) {
 	req, err := http.NewRequestWithContext(ctx, "GET", feedURL, nil)
 	if err != nil {
@@ -260,6 +265,7 @@ func main() {
 	cmds.register("addfeed", handlerAddFeed)
 	cmds.register("feeds", handlerFeeds)
 	cmds.register("follow", handlerFollow)
+	cmds.register("following", handlerFollowing)
 
 	if len(os.Args) < 2 { //os.Args is a []string
 		fmt.Printf("Error: less than 2 arguments")
