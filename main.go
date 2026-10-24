@@ -242,7 +242,6 @@ func fetchFeed(ctx context.Context, feedURL string) (*RSSFeed, error) {
 		data.Channel.Item[i].Title = html.UnescapeString(item.Title)
 		data.Channel.Item[i].Description = html.UnescapeString(item.Description)
 	}
-	//unescape stuff here
 
 	return &data, nil
 }
