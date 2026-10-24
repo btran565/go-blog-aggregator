@@ -145,6 +145,10 @@ func handlerFeeds(s *state, cmd command) error {
 }
 
 func handlerAddFeed(s *state, cmd command, user database.User) error {
+	if len(cmd.args) < 2 { //argument check
+		return fmt.Errorf("addfeed requires a name and url argument")
+	}
+
 	feed, err := s.db.CreateFeed(context.Background(), database.CreateFeedParams{
 		ID:        uuid.New(),
 		CreatedAt: time.Now(),
