@@ -214,6 +214,7 @@ func handlerFollowing(s *state, cmd command, user database.User) error {
 	return nil
 }
 func handlerUnfollow(s *state, cmd command, user database.User) error {
+	_, err := s.db.
 	return nil
 }
 
