@@ -214,7 +214,18 @@ func handlerFollowing(s *state, cmd command, user database.User) error {
 	return nil
 }
 func handlerUnfollow(s *state, cmd command, user database.User) error {
-	_, err := s.db.
+	feed, err := s.db.GetFeedByUrl(context.Background(), cmd.args[0])
+	if err != nil {
+		return err
+	}
+
+	err = s.db.DeleteFollowRecord(context.Background(), database.DeleteFollowRecordParams{
+		UserID: user.ID,
+		FeedID: feed.ID,
+	})
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
