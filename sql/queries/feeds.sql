@@ -20,3 +20,6 @@ FROM feeds
 INNER JOIN users ON feeds.user_id = users.id;
 
 -- name: MarkFeedFetched :exec
+UPDATE feeds
+SET updated_at = NOW(), last_fetched_at = NOW()
+WHERE feeds.id = $1;
