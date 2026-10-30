@@ -23,3 +23,5 @@ INNER JOIN users ON feeds.user_id = users.id;
 UPDATE feeds
 SET updated_at = NOW(), last_fetched_at = NOW()
 WHERE feeds.id = $1;
+
+-- name: GetNextFeedToFetch :one
