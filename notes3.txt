@@ -121,3 +121,7 @@ go run . register brandon
 go run . login brandon
 go run . reset
 go run . users
+
+
+## Run this to give Claude context:
+npx repomix --ignore "vendor/**"

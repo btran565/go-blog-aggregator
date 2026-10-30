@@ -30,3 +30,8 @@ go.work.sum
 # Editor/IDE
 # .idea/
 # .vscode/
+
+# Repomix / Repopack build outputs
+repomix-output.txt
+repopack-output.txt
+project_bundle.txt
