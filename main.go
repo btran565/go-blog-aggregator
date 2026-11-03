@@ -127,10 +127,25 @@ func handlerUsers(s *state, cmd command) error {
 }
 
 func handlerAgg(s *state, cmd command) error {
-	if len(cmd.args) == 0 {
+	if len(cmd.args) != 1 {
 		return fmt.Errorf("agg requires a 'time between requests' argument")
 	}
-
+	timeBetweenReqs, err := time.ParseDuration(cmd.args[0])
+	if err != nil {
+		return err
+	}
+	if timeBetweenReqs <= 0 {
+		return fmt.Errorf("%d is less than or equal to 0", timeBetweenReqs)
+	}
+	fmt.Printf("Collecting feeds every %v\n", timeBetweenReqs)
+	ticker := time.NewTicker(timeBetweenReqs)
+	defer ticker.Stop()
+	for ; ; <-ticker.C {
+		err = scrapeFeeds(s)
+		if err != nil {
+			return err
+		}
+	}
 }
 
 func handlerFeeds(s *state, cmd command) error {
