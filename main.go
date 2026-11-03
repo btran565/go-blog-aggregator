@@ -143,7 +143,7 @@ func handlerAgg(s *state, cmd command) error {
 	for ; ; <-ticker.C {
 		err = scrapeFeeds(s)
 		if err != nil {
-			return err
+			fmt.Printf("Error scraping feed: %v\n", err)
 		}
 	}
 }
