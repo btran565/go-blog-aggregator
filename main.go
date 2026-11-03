@@ -127,12 +127,10 @@ func handlerUsers(s *state, cmd command) error {
 }
 
 func handlerAgg(s *state, cmd command) error {
-	feed, err := fetchFeed(context.Background(), "https://www.wagslane.dev/index.xml") //temp url
-	if err != nil {
-		return err
+	if len(cmd.args) == 0 {
+		return fmt.Errorf("agg requires a 'time between requests' argument")
 	}
-	fmt.Printf("%v\n", feed)
-	return nil
+
 }
 
 func handlerFeeds(s *state, cmd command) error {
