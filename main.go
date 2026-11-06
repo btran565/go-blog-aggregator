@@ -135,7 +135,7 @@ func handlerAgg(s *state, cmd command) error {
 		return err
 	}
 	if timeBetweenReqs <= time.Second {
-		return fmt.Errorf("%v is less than or equal to 0", timeBetweenReqs)
+		return fmt.Errorf("%v is less than 1s.", timeBetweenReqs)
 	}
 	fmt.Printf("Collecting feeds every %v\n", timeBetweenReqs)
 	ticker := time.NewTicker(timeBetweenReqs)
