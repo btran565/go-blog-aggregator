@@ -291,11 +291,37 @@ func scrapeFeeds(s *state) error { //refactor: save to db instead of printing
 	if err != nil {
 		return err
 	}
-	for _, item := range unescapedFeed.Channel.Item {
-		fmt.Printf("%s\n", item.Title)
+	for _, item := range unescapedFeed.Channel.Item { //WIP
+		post := database.CreatePostParams{
+			ID:          uuid.New(),
+			CreatedAt:   time.Now(),
+			UpdatedAt:   time.Now(),
+			Title:       item.Title,
+			Url:         item.Link,
+			Description: sql.NullString{String: "", Valid: false},
+			PublishedAt: sql.NullTime{},
+			FeedID:      nextFeed.ID,
+		}
+		if item.Description != "" {
+			post.Description = sql.NullString{String: item.Description, Valid: true}
+		}
+		if item.PubDate != "" {
+			time
+			post.PublishedAt = sql.NullTime{}
+		}
 	}
 
 	return nil
+}
+
+func parseRSSDate(date string) (time.Time, error) {
+	t, err := time.Parse(time.RFC1123Z, date)
+	if err != nil {
+		t, err := time.Parse(time.RFC1123, date)
+		if err != nil {
+			return nil, err
+		}
+	}
 }
 
 func middlewareLoggedIn(handler func(s *state, cmd command, user database.User) error) func(s *state, cmd command) error {
