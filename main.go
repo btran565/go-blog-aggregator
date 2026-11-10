@@ -307,10 +307,10 @@ func scrapeFeeds(s *state) error { //refactor: save to db instead of printing
 		}
 		if item.PubDate != "" {
 			t, err := parseRSSDate(item.PubDate)
-			if err != nil {
-				post.PublishedAt = sql.NullTime{}
+			if err == nil {
+				post.PublishedAt = sql.NullTime{Time: t, Valid: true}
 			}
-			post.PublishedAt = sql.NullTime{Time: t, Valid: true}
+
 		}
 		_, err := s.db.CreatePost(context.Background(), post)
 		if err != nil {
