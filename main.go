@@ -278,7 +278,7 @@ func fetchFeed(ctx context.Context, feedURL string) (*RSSFeed, error) {
 	return &data, nil
 }
 
-func scrapeFeeds(s *state) error {
+func scrapeFeeds(s *state) error { //refactor: save to db instead of printing
 	nextFeed, err := s.db.GetNextFeedToFetch(context.Background())
 	if err != nil {
 		return err
