@@ -306,22 +306,31 @@ func scrapeFeeds(s *state) error { //refactor: save to db instead of printing
 			post.Description = sql.NullString{String: item.Description, Valid: true}
 		}
 		if item.PubDate != "" {
-			time
-			post.PublishedAt = sql.NullTime{}
+			t, err := parseRSSDate(item.PubDate)
+			if err != nil {
+				post.PublishedAt = sql.NullTime{}
+			}
+			post.PublishedAt = sql.NullTime{Time: t, Valid: true}
+		}
+		_, err := s.db.CreatePost(context.Background(), post)
+		if err != nil {
+			fmt.Println(err)
 		}
 	}
 
 	return nil
 }
 
-func parseRSSDate(date string) (time.Time, error) {
+func parseRSSDate(date string) (time.Time, error) { //used in scrapeFeeds
 	t, err := time.Parse(time.RFC1123Z, date)
 	if err != nil {
-		t, err := time.Parse(time.RFC1123, date)
+		t, err = time.Parse(time.RFC1123, date)
 		if err != nil {
-			return nil, err
+			return time.Time{}, err
 		}
+		return t, nil //returns RFC1123
 	}
+	return t, nil //returns RFC1123Z
 }
 
 func middlewareLoggedIn(handler func(s *state, cmd command, user database.User) error) func(s *state, cmd command) error {
