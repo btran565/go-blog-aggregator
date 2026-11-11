@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"encoding/xml"
+	"errors"
 	"fmt"
 	"html"
 	"io"
@@ -14,7 +15,7 @@ import (
 	"github.com/btran565/go-blog-aggregator/internal/config"
 	"github.com/btran565/go-blog-aggregator/internal/database" //all database directory files are in 'package database'
 	"github.com/google/uuid"
-	_ "github.com/lib/pq"
+	"github.com/lib/pq"
 )
 
 type RSSFeed struct {
@@ -291,7 +292,7 @@ func scrapeFeeds(s *state) error { //refactor: save to db instead of printing
 	if err != nil {
 		return err
 	}
-	for _, item := range unescapedFeed.Channel.Item { //WIP
+	for _, item := range unescapedFeed.Channel.Item {
 		post := database.CreatePostParams{
 			ID:          uuid.New(),
 			CreatedAt:   time.Now(),
@@ -314,6 +315,10 @@ func scrapeFeeds(s *state) error { //refactor: save to db instead of printing
 		}
 		_, err := s.db.CreatePost(context.Background(), post)
 		if err != nil {
+			var pqErr *pq.Error
+			if errors.As(err, &pqErr) && pqErr.Code == "23505" {
+				continue
+			}
 			fmt.Println(err)
 		}
 	}
