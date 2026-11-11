@@ -244,14 +244,32 @@ func handlerUnfollow(s *state, cmd command, user database.User) error {
 	return nil
 }
 
-func handlerBrowse(s *state, cmd command) error {
+func handlerBrowse(s *state, cmd command, user database.User) error {
 	limit := 2
 	if len(cmd.args) == 1 {
 		n, err := strconv.Atoi(cmd.args[0])
 		if err != nil {
 			return err
 		}
+		if n < 1 {
+			return fmt.Errorf("limit must be at least 1.\ninput: %d\n", n)
+		}
 		limit = n
+	}
+	posts, err := s.db.GetPostsForUser(context.Background(), database.GetPostsForUserParams{
+		UserID: user.ID,
+		Limit:  int32(limit),
+	})
+	if err != nil {
+		return err
+	}
+	if len(posts) == 0 {
+		fmt.Println("no posts found")
+	}
+	for _, post := range posts {
+		fmt.Printf("%s: %s\n", post.FeedName, post.Title)
+		fmt.Printf("%s\n", post.Url)
+
 	}
 	return nil
 }
@@ -389,7 +407,7 @@ func main() {
 	cmds.register("follow", middlewareLoggedIn(handlerFollow))
 	cmds.register("following", middlewareLoggedIn(handlerFollowing))
 	cmds.register("unfollow", middlewareLoggedIn(handlerUnfollow))
-	cmds.register("browse", handlerBrowse)
+	cmds.register("browse", middlewareLoggedIn(handlerBrowse))
 
 	if len(os.Args) < 2 { //os.Args is a []string
 		fmt.Printf("Error: less than 2 arguments")
